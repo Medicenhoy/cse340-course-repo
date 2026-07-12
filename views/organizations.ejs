@@ -7,5 +7,12 @@
         <img src="/images/helping-hands-3.jpg" alt="Community members receiving support" class="org-img">
     </div>
     <p>We partner with these amazing organizations to drive change.</p>
+    <ul>
+        <% organizations.forEach(organization => { %>
+            <li>
+                <strong><%= organization.name %></strong>: <%= organization.description %>
+            </li>
+        <% }) %>
+    </ul>
 </main>
 <%- include('partials/footer') %>
