@@ -2,28 +2,27 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { getAllOrganizations } from './src/models/organizations.js';
-import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import routes from './src/routes.js';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
     if (NODE_ENV === 'development') {
         console.log(`${req.method} ${req.url}`);
     }
-    next(); 
+    next();
 });
 
 app.use((req, res, next) => {
@@ -31,23 +30,28 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', (req, res) => {
-    res.render('index', { title: 'Home' });
+app.use('/', routes);
+
+app.use((req, res, next) => {
+    const err = new Error('Page Not Found');
+    err.status = 404;
+    next(err);
 });
 
-app.get('/organizations', async (req, res) => {
-    const organizations = await getAllOrganizations();
-    res.render('organizations', { title: 'Organizations', organizations });
-});
+app.use((err, req, res, next) => {
+    console.error('Error occurred:', err.message);
+    console.error('Stack trace:', err.stack);
 
-app.get('/projects', async (req, res) => {
-    const projects = await getAllProjects();
-    res.render('projects', { title: 'Service Projects', projects });
-});
+    const status = err.status || 500;
+    const template = status === 404 ? '404' : '500';
 
-app.get('/categories', async (req, res) => {
-    const categories = await getAllCategories();
-    res.render('categories', { title: 'Service Project Categories', categories });
+    const context = {
+        title: status === 404 ? 'Page Not Found' : 'Server Error',
+        error: err.message,
+        stack: err.stack
+    };
+
+    res.status(status).render(`errors/${template}`, context);
 });
 
 app.listen(port, () => {
