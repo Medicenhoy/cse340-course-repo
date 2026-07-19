@@ -1,15 +1,12 @@
--- src/setup.sql
--- Re-creates the full database: organizations, projects, categories
 
--- Drop tables in dependency order (children first)
 DROP TABLE IF EXISTS project_categories;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS organizations;
 
--- =========================
+
 -- Organizations
--- =========================
+
 CREATE TABLE organizations (
     organization_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -21,9 +18,9 @@ INSERT INTO organizations (name, description) VALUES
 ('Green Future', 'An organization focused on environmental restoration and sustainability.'),
 ('Bright Minds', 'A group that promotes education and literacy in the community.');
 
--- =========================
+
 -- Service Projects
--- =========================
+
 CREATE TABLE projects (
     project_id SERIAL PRIMARY KEY,
     organization_id INT NOT NULL REFERENCES organizations(organization_id),
@@ -53,9 +50,7 @@ INSERT INTO projects (organization_id, title, description, location, date) VALUE
 (3, 'STEM Saturday Workshop', 'Hands-on science activities for kids.', 'High School Lab', '2026-09-19'),
 (3, 'Book Donation Sort', 'Sort and shelve donated books for the book fair.', 'Public Library', '2026-10-10');
 
--- =========================
--- Categories (many-to-many with projects)
--- =========================
+
 CREATE TABLE categories (
     category_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
@@ -67,15 +62,13 @@ INSERT INTO categories (name) VALUES
 ('Community Service'),
 ('Health and Wellness');
 
--- Junction table: a project can have many categories,
--- and a category can have many projects
+
 CREATE TABLE project_categories (
     project_id INT NOT NULL REFERENCES projects(project_id) ON DELETE CASCADE,
     category_id INT NOT NULL REFERENCES categories(category_id) ON DELETE CASCADE,
     PRIMARY KEY (project_id, category_id)
 );
 
--- Every project gets at least one category
 INSERT INTO project_categories (project_id, category_id) VALUES
 (1, 3), (1, 4),      -- Food Drive: Community Service, Health and Wellness
 (2, 3),              -- Winter Coat Collection: Community Service

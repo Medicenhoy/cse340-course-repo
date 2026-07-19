@@ -9,12 +9,12 @@ const router = express.Router();
 
 router.get('/', showHomePage);
 router.get('/organizations', showOrganizationsPage);
-router.get('/organization/:id', showOrganizationDetailsPage);
 router.get('/projects', showProjectsPage);
 router.get('/project/:id', showProjectDetailsPage);
 router.get('/categories', showCategoriesPage);
 
-// error-handling routes
+router.get('/organization/:id', showOrganizationDetailsPage);
+
 router.get('/test-error', testErrorPage);
 
 export default router;
