@@ -45,3 +45,25 @@ export async function getProjectsByCategoryId(categoryId) {
     );
     return result.rows;
 }
+
+async function assignCategoryToProject(categoryId, projectId) {
+    await pool.query(
+        `INSERT INTO project_categories (category_id, project_id)
+         VALUES ($1, $2)`,
+        [categoryId, projectId]
+    );
+}
+
+export async function updateCategoryAssignments(projectId, categoryIds) {
+    // First, remove existing category assignments for the project
+    await pool.query(
+        `DELETE FROM project_categories
+         WHERE project_id = $1`,
+        [projectId]
+    );
+
+    // Next, add the new category assignments
+    for (const categoryId of categoryIds) {
+        await assignCategoryToProject(categoryId, projectId);
+    }
+}
