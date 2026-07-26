@@ -9,5 +9,7 @@
             <li><a href="/project/<%= project.project_id %>"><%= project.title %></a></li>
         <% }) %>
     </ul>
+    <img src="/images/<%= organizationDetails.logo_filename %>" alt="<%= organizationDetails.name %> logo">
+    <p>Contact: <%= organizationDetails.contact_email %></p>
 </main>
 <%- include('partials/footer') %>

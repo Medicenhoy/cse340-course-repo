@@ -10,13 +10,15 @@ DROP TABLE IF EXISTS organizations;
 CREATE TABLE organizations (
     organization_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    description TEXT
+    description TEXT,
+    contact_email VARCHAR(100),
+    logo_filename VARCHAR(100)
 );
 
-INSERT INTO organizations (name, description) VALUES
-('Helping Hands', 'A nonprofit dedicated to supporting local families in need.'),
-('Green Future', 'An organization focused on environmental restoration and sustainability.'),
-('Bright Minds', 'A group that promotes education and literacy in the community.');
+INSERT INTO organizations (name, description, contact_email, logo_filename) VALUES
+('Helping Hands', 'A nonprofit dedicated to supporting local families in need.', 'contact@helpinghands.org', 'placeholder-logo.png'),
+('Green Future', 'An organization focused on environmental restoration and sustainability.', 'info@greenfuture.org', 'placeholder-logo.png'),
+('Bright Minds', 'A group that promotes education and literacy in the community.', 'hello@brightminds.org', 'placeholder-logo.png');
 
 
 -- Service Projects

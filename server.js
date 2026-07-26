@@ -2,19 +2,34 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import session from 'express-session';
 import routes from './src/routes.js';
+import flash from './src/middleware/flash.js';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
+}));
+
+app.use(flash);
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
