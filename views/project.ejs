@@ -1,5 +1,10 @@
 <%- include('partials/header') %>
-<main>
+<main class="project-details">
+    <img
+        src="/images/<%= project.logo_filename %>"
+        alt="<%= project.organization_name %> logo"
+        class="org-logo-corner"
+    >
     <h1><%= project.title %></h1>
     <p><%= project.description %></p>
     <p><strong>Date:</strong>

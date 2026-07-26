@@ -44,7 +44,8 @@ export async function getProjectDetails(id) {
                 projects.date,
                 projects.location,
                 projects.organization_id,
-                organizations.name AS organization_name
+                organizations.name AS organization_name,
+                organizations.logo_filename
          FROM projects
          JOIN organizations
            ON projects.organization_id = organizations.organization_id
