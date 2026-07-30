@@ -1,12 +1,11 @@
-
 DROP TABLE IF EXISTS project_categories;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS organizations;
 
-
 -- Organizations
-
 CREATE TABLE organizations (
     organization_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -20,9 +19,7 @@ INSERT INTO organizations (name, description, contact_email, logo_filename) VALU
 ('Green Future', 'An organization focused on environmental restoration and sustainability.', 'info@greenfuture.org', 'placeholder-logo.png'),
 ('Bright Minds', 'A group that promotes education and literacy in the community.', 'hello@brightminds.org', 'placeholder-logo.png');
 
-
 -- Service Projects
-
 CREATE TABLE projects (
     project_id SERIAL PRIMARY KEY,
     organization_id INT NOT NULL REFERENCES organizations(organization_id),
@@ -52,7 +49,6 @@ INSERT INTO projects (organization_id, title, description, location, date) VALUE
 (3, 'STEM Saturday Workshop', 'Hands-on science activities for kids.', 'High School Lab', '2026-09-19'),
 (3, 'Book Donation Sort', 'Sort and shelve donated books for the book fair.', 'Public Library', '2026-10-10');
 
-
 CREATE TABLE categories (
     category_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
@@ -63,7 +59,6 @@ INSERT INTO categories (name) VALUES
 ('Educational'),
 ('Community Service'),
 ('Health and Wellness');
-
 
 CREATE TABLE project_categories (
     project_id INT NOT NULL REFERENCES projects(project_id) ON DELETE CASCADE,
@@ -87,3 +82,24 @@ INSERT INTO project_categories (project_id, category_id) VALUES
 (13, 2),             -- Adult Literacy Tutoring: Educational
 (14, 2),             -- STEM Saturday Workshop: Educational
 (15, 2);             -- Book Donation Sort: Educational
+
+-- Roles table
+CREATE TABLE roles (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(50) UNIQUE NOT NULL,
+    role_description TEXT
+);
+
+INSERT INTO roles (role_name, role_description) VALUES 
+    ('user', 'Standard user with basic access'),
+    ('admin', 'Administrator with full system access');
+
+-- Users table
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id INTEGER REFERENCES roles(role_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
