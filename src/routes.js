@@ -4,7 +4,7 @@ import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganization
 import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, showEditProjectForm, processEditProjectForm, projectValidation } from './controllers/projects.js';
 import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm, categoryValidation } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
-import { showUserRegistrationForm, processUserRegistrationForm } from './controllers/users.js';
+import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout } from './controllers/users.js';
 
 const router = express.Router();
 
@@ -36,6 +36,10 @@ router.post('/assign-categories/:projectId', processAssignCategoriesForm);
 
 router.get('/register', showUserRegistrationForm);
 router.post('/register', processUserRegistrationForm);
+
+router.get('/login', showLoginForm);
+router.post('/login', processLoginForm);
+router.get('/logout', processLogout);
 
 router.get('/test-error', testErrorPage);
 
