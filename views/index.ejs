@@ -3,5 +3,8 @@
     <h1>Welcome to the <%= title %> Page</h1>
     <img src="/images/home-banner.jpg" alt="Service Project Banner" style="width:100%; max-width:600px;">
     <p>Explore our community initiatives and join us in making a difference.</p>
+    <% if (isLoggedIn) { %>
+    <p><a href="/dashboard">My Dashboard</a></p>
+    <% } %>
 </main>
 <%- include('partials/footer') %>
