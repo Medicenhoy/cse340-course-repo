@@ -13,6 +13,10 @@
             <a href="/projects">Projects</a>
             <a href="/categories">Categories</a>
             <% if (isLoggedIn) { %>
+                <% if (isAdmin) { %>
+                    <a href="/users">Users</a>
+                <% } %>
+                <a href="/dashboard">Dashboard</a>
                 <a href="/logout">Logout</a>
             <% } else { %>
                 <a href="/register">Register</a>
